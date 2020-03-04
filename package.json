@@ -1,0 +1,32 @@
+{
+  "name": "clocktab",
+  "version": "1.0.0",
+  "description": "clock",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scirelli-c1/clocktab.git"
+  },
+  "keywords": [
+    "clock",
+    "tab"
+  ],
+  "author": "Steve Cirelli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scirelli-c1/clocktab/issues"
+  },
+  "homepage": "https://github.com/scirelli-c1/clocktab#readme",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.4.2",
+    "lit-element": "^2.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-plugin-lit": "^1.2.0",
+    "polymer-cli": "^1.9.11"
+  }
+}
