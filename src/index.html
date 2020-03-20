@@ -14,16 +14,16 @@
       <link rel="stylesheet" href="css/main.css">
 
       <meta name="theme-color" content="#fafafa">
+
+      <script src="js/custom-element.js" type="module" defer></script>
     </head>
     <body>
       <!--[if IE]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
       <![endif]-->
 
-      <custom-element></custom-element>
+      <steve-element data-text="steve"></steve-element>
+      <include-element data-src="templates/steve.html"></include-element>
 
-      <script src="js/vendor/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
-      <script src="js/vendor/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-      <script src="index.js"></script>
     </body>
 </html>
