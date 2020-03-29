@@ -1,7 +1,7 @@
 import {html, render, directive} from 'https://unpkg.com/lit-html?module';
 //import {render, TemplateResult} from 'https://unpkg.com/lit-html@1.1.2/lib/shady-render.js?module';
-import {cache} from 'https://unpkg.com/lit-html@1.1.2/directives/cache.js?module';
-import {repeat} from 'https://unpkg.com/lit-html@1.1.2/directives/repeat.js?module';
+//import {cache} from 'https://unpkg.com/lit-html@1.1.2/directives/cache.js?module';
+//import {repeat} from 'https://unpkg.com/lit-html@1.1.2/directives/repeat.js?module';
 
 class CustomElement extends HTMLElement{
     constructor() {
@@ -97,7 +97,7 @@ const include = directive(self=>(part)=>{
     });
 });
 
-class SteveElemeent extends CustomElement{
+class ClockElemeent extends CustomElement{
     constructor() {
         super();
         this._date = new Date();
@@ -192,4 +192,4 @@ class SteveElemeent extends CustomElement{
     }
 
 }
-customElements.define('steve-element', SteveElemeent);
+customElements.define('clock-element', ClockElemeent);
