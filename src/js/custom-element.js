@@ -96,68 +96,100 @@ const include = directive(self=>(part)=>{
         part.commit();
     });
 });
-const include2 = directive((url)=>(part)=> {
-    fetch(url).then(r => r.text())
-        .then(templateContent => {
-            const template = document.createElement('div');
-            template.innerHTML = templateContent;
-            part.setValue(html`${template.childNodes}`);
-            part.commit();
-        });
-});
 
 class SteveElemeent extends CustomElement{
-  constructor() {
-    super();
-    this.name = '';
-  }
+    constructor() {
+        super();
+        this._date = new Date();
 
-  render() {
-      if(this.hasAttribute('data-text')) {
-          this.name = this.getAttribute('data-text')
-      }
+        window.setInterval(()=> {
+            this.date = new Date();
+        }, 1000);
 
-      return html`<p>Hello ${this.name}</p>`;
-  }
+    }
+
+    get date() {
+        return this._date;
+    }
+
+    set date(d) {
+        this._date = d;
+        this.update();
+    }
+
+    update() {
+        render(this.render(), this.shadowRoot, {eventContext: this});
+    }
+
+    render() {
+        let hours24 = this.date.getHours(),
+            hours12 = hours24 % 12,
+            minutes = this.date.getMinutes(),
+            seconds = this.date.getSeconds(),
+            period = hours24 > 12 ? 'pm' : 'am',
+
+            dayOfWeek = new Intl.DateTimeFormat('en-US',{weekday: 'short'}).format(this.date),
+            month = new Intl.DateTimeFormat('en-US',{month: 'short'}).format(this.date),
+            dayOfMonth = this.date.getDate(),
+            year = this.date.getFullYear();
+
+        return html`
+            <style>
+                :host {
+                  display: block;
+                  position: relative;
+                  background-color: black;
+                  color: white;
+                  height: 100vh;
+                }
+                .datetime {
+                  width: 100%;
+                  text-align: center;
+
+                  position: absolute;
+                  top: 50%;
+                  -ms-transform: translateY(-50%);
+                  transform: translateY(-50%);
+                }
+                .time {
+                  font-size: 17vw;
+                  line-height: 1em;
+                }
+                .time * {
+                  display: inline-block;
+                  padding: 0;
+                  margin: 0;
+                }
+                .colon:after {
+                  content: ':';
+                }
+                .period {
+                    text-transform: uppercase;
+                    margin-left: 3vw;
+                }
+
+                .date {
+                  font-size: 5vw;
+                  line-height: 1em;
+                }
+
+                .date span {
+                    margin-right: 1.5vw;
+                }
+                .date span:last-child {
+                    margin-right: 0;
+                }
+            </style>
+            <div class="datetime">
+                <div class="time">
+                    <div class="hours colon">${hours12 ? hours12 : 12}</div><div class="minutes colon">${minutes}</div><div class="seconds">${seconds}</div><div class="period">${period}</div>
+                </div>
+                <div class="date">
+                  <span class="day">${dayOfWeek}</span><span class="month">${month}</span><span class="dayOfMonth">${dayOfMonth}</span><span class="year">${year}</span>
+                </div>
+            </div>
+        `;
+    }
 
 }
 customElements.define('steve-element', SteveElemeent);
-
-class IncludeElemeent extends CustomElement{
-    constructor() {
-        super();
-        this.src = '';
-    }
-
-    /*
-    render() {
-        if(this.hasAttribute('data-src')) {
-            this.src = this.getAttribute('data-src')
-        }
-
-        return html`${include(this)}`;
-    }
-    */
-
-    render() {
-        if(this.hasAttribute('data-src')) {
-            this.src = this.getAttribute('data-src')
-        }
-        fetch(this.src).then(r => r.text())
-            .then(templateContent => {
-                const template = document.createElement('div'),
-                    tag = (...args)=>{
-                        return render(html.apply(html, args), this.shadowRoot || this);
-                    };
-
-                template.innerHTML = templateContent;
-                tag`${`${template.childNodes[0].outerHTML}`}`;
-            });
-
-        return html`
-            <style>:host { display: block; }</style>
-            Loading...
-        `;
-    }
-}
-customElements.define('include-element', IncludeElemeent);
