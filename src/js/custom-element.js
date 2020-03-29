@@ -96,6 +96,15 @@ const include = directive(self=>(part)=>{
         part.commit();
     });
 });
+const include2 = directive((url)=>(part)=> {
+    fetch(url).then(r => r.text())
+        .then(templateContent => {
+            const template = document.createElement('div');
+            template.innerHTML = templateContent;
+            part.setValue(html`${template.childNodes}`);
+            part.commit();
+        });
+});
 
 class SteveElemeent extends CustomElement{
   constructor() {
@@ -120,6 +129,7 @@ class IncludeElemeent extends CustomElement{
         this.src = '';
     }
 
+    /*
     render() {
         if(this.hasAttribute('data-src')) {
             this.src = this.getAttribute('data-src')
@@ -127,6 +137,27 @@ class IncludeElemeent extends CustomElement{
 
         return html`${include(this)}`;
     }
+    */
 
+    render() {
+        if(this.hasAttribute('data-src')) {
+            this.src = this.getAttribute('data-src')
+        }
+        fetch(this.src).then(r => r.text())
+            .then(templateContent => {
+                const template = document.createElement('div'),
+                    tag = (...args)=>{
+                        return render(html.apply(html, args), this.shadowRoot || this);
+                    };
+
+                template.innerHTML = templateContent;
+                tag`${`${template.childNodes[0].outerHTML}`}`;
+            });
+
+        return html`
+            <style>:host { display: block; }</style>
+            Loading...
+        `;
+    }
 }
 customElements.define('include-element', IncludeElemeent);
